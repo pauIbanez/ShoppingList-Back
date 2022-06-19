@@ -11,6 +11,12 @@ func CreateItemHandler() *ItemHandlers {
 				Quantity: 10,
         Checked: false,
 			},
+      "1655570749194813600": {
+				Id:       "1655570749194813600",
+				Name:     "Bananas",
+				Quantity: 6,
+        Checked: false,
+			},
 		},
 	}
 }
