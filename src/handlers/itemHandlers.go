@@ -2,11 +2,13 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"shoppinglist/src/data"
 	"strings"
 	"sync"
+	"time"
 )
 
 type ItemHandlers struct {
@@ -96,6 +98,47 @@ func (h * ItemHandlers) ModifyItem(w http.ResponseWriter, r *http.Request){
   h.Unlock()
 
   w.WriteHeader(http.StatusAccepted)
+}
+
+func (h * ItemHandlers) CreateItem(w http.ResponseWriter, r *http.Request) {
+  bodyBytes, err := ioutil.ReadAll(r.Body)
+  defer r.Body.Close()
+  
+  if err != nil {
+    w.WriteHeader(http.StatusInternalServerError)
+    w.Write([]byte(err.Error()))
+    return
+  }
+
+  ct := r.Header.Get("content-type")
+
+  if !strings.Contains(ct, "application/json")  {
+    w.WriteHeader(http.StatusUnsupportedMediaType)
+    w.Write([]byte("Only json is supported"))
+    return
+  }
+
+  var item data.Item
+  err = json.Unmarshal(bodyBytes, &item)
+
+  if err != nil {
+    w.WriteHeader(http.StatusBadRequest)
+    w.Write([]byte(err.Error()))
+    return
+  }
+
+  if item.Quantity == 0 || item.Name == "" {
+    w.WriteHeader(http.StatusBadRequest)
+    w.Write([]byte("Invalid Request"))
+    return
+  }
+
+  item.Id = fmt.Sprintf("%d", time.Now().UnixNano())
+
+  h.Lock()
+  h.store[item.Id] = item
+  defer h.Unlock()
+
 }
 
 
