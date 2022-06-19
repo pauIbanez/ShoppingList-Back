@@ -8,7 +8,7 @@ import (
 func StartServer(port string) {
   itemhandlers := handlers.CreateItemHandler()
 
-  http.HandleFunc("/", itemhandlers.Test)
+  http.HandleFunc("/items/all", itemhandlers.GetAllItems)
 
   err := http.ListenAndServe(":"+port, nil)
   if err != nil {

@@ -11,6 +11,6 @@ type ItemHandlers struct {
   store map[string]data.Item
 }
 
-func (h * ItemHandlers) Test(w http.ResponseWriter, r *http.Request){
+func (h * ItemHandlers) GetAllItems(w http.ResponseWriter, r *http.Request){
   w.Write([]byte("Hello world"))
 }
