@@ -2,7 +2,7 @@ package handlers
 
 import "shoppinglist/src/data"
 
-func createItemHandler() *ItemHandlers {
+func CreateItemHandler() *ItemHandlers {
 	return &ItemHandlers{
 		store: map[string]data.Item{
 			"1655570749194813500": {
