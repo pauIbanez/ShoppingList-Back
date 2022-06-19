@@ -1,3 +1,3 @@
-module src
+module shoppinglist
 
 go 1.18
