@@ -10,6 +10,7 @@ func StartServer(port string) {
 
   http.HandleFunc("/items/all", itemhandlers.GetAllItems)
   http.HandleFunc("/items/modify", itemhandlers.ModifyItem)
+  http.HandleFunc("/items/create", itemhandlers.CreateItem)
 
   err := http.ListenAndServe(":"+port, nil)
   if err != nil {
