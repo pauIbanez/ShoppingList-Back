@@ -5,8 +5,13 @@ import (
 	"shoppinglist/src"
 )
 
-var port string = os.Getenv("SERVER_PORT") || 8081
+var port string = os.Getenv("SERVER_PORT")
 
 func main() {
-  src.StartServer()
+
+  if port == "" {
+    port = "8081"
+  }
+  
+  src.StartServer(port)
 }

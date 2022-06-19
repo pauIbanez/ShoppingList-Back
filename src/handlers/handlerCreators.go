@@ -9,7 +9,11 @@ func createItemHandler() *ItemHandlers {
 				Id:       "1655570749194813500",
 				Name:     "Carrots",
 				Quantity: 10,
+        Checked: false,
 			},
 		},
 	}
 }
+
+
+
