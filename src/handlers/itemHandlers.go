@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"shoppinglist/src/data"
@@ -68,6 +67,12 @@ func (h * ItemHandlers) ModifyItem(w http.ResponseWriter, r *http.Request){
     return
   }
 
+  if item.Id == "" {
+     w.WriteHeader(http.StatusBadRequest)
+    w.Write([]byte("Bad request, item Id needed"))
+    return
+  }
+
   h.Lock()
   foundItem, ok := h.store[item.Id]
   h.Unlock()
@@ -77,10 +82,9 @@ func (h * ItemHandlers) ModifyItem(w http.ResponseWriter, r *http.Request){
     return
   }
 
-  fmt.Println(foundItem)
 
   h.Lock()
-  h.store[item.Id] = item
+  h.store[foundItem.Id] = item
   h.Unlock()
 
   w.WriteHeader(http.StatusAccepted)
