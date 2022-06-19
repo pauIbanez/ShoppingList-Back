@@ -138,7 +138,52 @@ func (h * ItemHandlers) CreateItem(w http.ResponseWriter, r *http.Request) {
   h.Lock()
   h.store[item.Id] = item
   defer h.Unlock()
-
+  
+  w.WriteHeader(http.StatusCreated)
 }
+
+func (h * ItemHandlers) DeleteItem(w http.ResponseWriter, r *http.Request) {
+  bodyBytes, err := ioutil.ReadAll(r.Body)
+  defer r.Body.Close()
+  
+  if err != nil {
+    w.WriteHeader(http.StatusInternalServerError)
+    w.Write([]byte(err.Error()))
+    return
+  }
+
+  ct := r.Header.Get("content-type")
+
+  if !strings.Contains(ct, "application/json")  {
+    w.WriteHeader(http.StatusUnsupportedMediaType)
+    w.Write([]byte("Only json is supported"))
+    return
+  }
+
+  var item data.Item
+  err = json.Unmarshal(bodyBytes, &item)
+
+  if err != nil {
+    w.WriteHeader(http.StatusBadRequest)
+    w.Write([]byte(err.Error()))
+    return
+  }
+
+  if item.Id == "" {
+     w.WriteHeader(http.StatusBadRequest)
+    w.Write([]byte("Bad request, item Id needed"))
+    return
+  }
+
+  var Id = item.Id 
+
+
+  h.Lock()
+  delete(h.store, Id)
+  defer h.Unlock()
+}
+
+
+
 
 
