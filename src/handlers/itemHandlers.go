@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"shoppinglist/src/data"
+	"strings"
 	"sync"
 )
 
@@ -51,7 +52,7 @@ func (h * ItemHandlers) ModifyItem(w http.ResponseWriter, r *http.Request){
 
   ct := r.Header.Get("content-type")
 
-  if ct != "application/json" {
+  if !strings.Contains(ct, "application/json")  {
     w.WriteHeader(http.StatusUnsupportedMediaType)
     w.Write([]byte("Only json is supported"))
     return
@@ -82,9 +83,16 @@ func (h * ItemHandlers) ModifyItem(w http.ResponseWriter, r *http.Request){
     return
   }
 
+  if item.Name == "" {
+    item.Name = foundItem.Name
+  }
+  if item.Quantity == 0 {
+    item.Quantity = foundItem.Quantity
+  }
+
 
   h.Lock()
-  h.store[foundItem.Id] = item
+  h.store[item.Id] = item
   h.Unlock()
 
   w.WriteHeader(http.StatusAccepted)
