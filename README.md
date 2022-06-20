@@ -24,6 +24,12 @@ The items have the following structure:
 
 Though to create an item ytou only need to ever send the name and quantity, since it defaults to checked: false and the API auto-assigns an ID.
 
+## How to use
+
+This apps needs a SERVER_PORT env variable, and thought that could be set as any available port I use 8081 since that's how the front is currently set up.
+To run the app simply input the following command while on the root folder:
+`SERVER_PORT=8081 go run main.go`
+
 ## What I learned
 
 - I learned to work better with maps.
